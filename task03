@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<mata charset = "utf-8" />
+		<title>IFE JavaScript Task01</title>
+		<style type = "text/css">
+
+		</style>
+	</head>
+	<body>
+		<ul id = "source">
+			<li>北京空气质量：<b>90</b></li>
+    		<li>上海空气质量：<b>70</b></li>
+   			<li>天津空气质量：<b>80</b></li>
+    		<li>广州空气质量：<b>50</b></li>
+    		<li>深圳空气质量：<b>40</b></li>
+    		<li>福州空气质量：<b>32</b></li>
+    		<li>成都空气质量：<b>95</b></li>
+		</ul>
+		<ul id = "resort">
+
+		</ul>
+		<button id = "sort-btn">sort</button>
+
+		<script>
+			function convertToArray(nodes){
+				var array = null;
+				try {
+					array = Array.prototype.slice.call(nodes, 0);
+				}catch (ex) {
+					array = new Array();
+					for (var i = 0, len = nodes.length; i < len; i ++){
+						array.push(nodes[i])
+					}
+				}
+				return array;
+			}
+			(function(){
+				var ul = document.getElementById("source");
+				var b = document.getElementsByTagName("b");
+				var resort = document.getElementById("resort");
+				var arrayB = convertToArray(b);
+				arrayB.sort(function(a, b) {
+					if (a.innerHTML > b.innerHTML) {return 1;}
+					else {return -1;}
+				});
+				
+				for (var i = 0; i < arrayB.length; i ++){
+					var text = document.createTextNode("第" + (i + 1) + "名:" + arrayB[i].previousSibling.nodeValue + "\<b\>" + arrayB[i].innerHTML + "\</b\>");
+					var li = document.createElement("li");
+					li.appendChild(text);
+					resort.appendChild(li);
+				}
+			})();
+		</script>
+	</body>
+
+</html>

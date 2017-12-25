@@ -34,7 +34,7 @@
 				}
 				return array;
 			}
-			(function(){
+			function render(){
 				var ul = document.getElementById("source");
 				var b = document.getElementsByTagName("b");
 				var resort = document.getElementById("resort");
@@ -50,7 +50,12 @@
 					li.appendChild(text);
 					resort.appendChild(li);
 				}
-			})();
+			}
+			function init() {
+				var btn = document.getElementById("sort-btn");
+				btn.addEventListener("click", render);
+			}
+			init();
 		</script>
 	</body>
 

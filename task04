@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<meta charset = "utf-8" />
+		<title>IFE JavaScript Task02</title>
+		<style type = "text/css">
+			ul {
+				margin-left:-40px;
+				list-style:none;
+			}
+			li {
+				float:left;
+				margin:5px;
+				padding:5px;
+				background-color:red;
+				color:white;
+				font-size:20px;
+			}
+		</style>
+	</head>
+	<body>
+		<label><input type = "text" id = "input" /></label>
+		<button id = "left-in" value = "左侧入">左侧入</button>
+		<button id = "right-in" value = "右侧入">右侧入</button>
+		<button id = "left-out" value = "左侧出">左侧出</button>
+		<button id = "right-out" value = "右侧出">右侧出</button>
+		<ul id = "squence">
+			<li>12</li>
+			<li>3</li>
+			<li>2</li>
+			<li>7</li>
+			<li>11</li>
+			<li>55</li>
+		</ul>
+
+		<script type = "text/JavaScript">
+			function insertIn(side) {
+				var inputValue = document.getElementById("input").value;
+				var textNode = document.createTextNode(inputValue);
+				if (textNode.length == 0){
+					return;
+				}
+				var li = document.createElement("li");
+				li.appendChild(textNode);
+				var ul = document.getElementById("squence");
+				if (side == "left-in"){
+					ul.insertBefore(li, ul.firstChild);
+				}else if(side == "right-in") {
+					ul.appendChild(li);
+				}else{
+					alert("error");
+				}
+				
+			}
+			function out(side) {
+				var ul = document.getElementById("squence");
+				if (side == "left-out"){
+					var value = ul.children[0].innerHTML;
+					ul.removeChild(ul.children[0]);
+					console.log(value);
+				}else if(side == "right-out"){
+					var len = ul.children.length - 1;
+					var value = ul.children[len].innerHTML;
+					ul.removeChild(ul.children[len]);
+					console.log(value);
+				}
+				
+			}
+			function init() {
+				document.getElementById("left-in").addEventListener("click", function(){
+					insertIn(this.id);
+				});
+				document.getElementById("left-out").addEventListener("click", function(){
+					out(this.id);
+				});
+				document.getElementById("right-in").addEventListener("click", function(){
+					insertIn(this.id);
+				});
+				document.getElementById("right-out").addEventListener("click", function(){
+					out(this.id);
+				});
+
+				/*
+					事件委托只为<ul>元素添加一个'onclick'事件处理程序，避免对列表中的每一个li都绑定事件，
+					因为有事件冒泡机制，单机每个<li>标签时，都会被这个函数处理。
+				*/
+				document.getElementById("squence").addEventListener("click", function(event) {
+					var target = event.target;
+					if(target.tagName = "LI"){
+						this.removeChild(target);
+					}
+				})
+			}
+			init();
+		</script>
+
+	</body>
+</html>

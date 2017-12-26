@@ -1,0 +1,145 @@
+<html>
+	<head>
+		<meta charset = "utf-8" />
+		<title>IFE JavaScript Task02</title>
+		<style type = "text/css">
+			ul {
+				list-style:none;
+				margin-left:-25px;
+			}
+			#squence li{
+				position:relative;
+				bottom:0;
+				margin:0 0 10px 10px;
+				padding:10px;
+				display:inline-block;
+				background-color:red;
+				height:80px;
+			}
+			button:hover{
+				background-color:#eee;
+				color:red;
+			}
+		</style>
+	</head>
+
+	<body>
+		<label><input type = "text" id = "input" /></label>
+		<button id = "left-in" value = "左侧入">左侧入</button>
+		<button id = "right-in" value = "右侧入">右侧入</button>
+		<button id = "left-out" value = "左侧出">左侧出</button>
+		<button id = "right-out" value = "右侧出">右侧出</button>
+		<button id = "sort" value = "排序">排序</button>
+
+		<ul id = "squence">
+		</ul>
+
+		<script type="text/javascript">
+			var num = 0;
+			var ul = document.getElementById("squence");
+
+			function insert(side) {
+				if (num > 60){
+					alert("too much!do not more than 60!");
+					return;
+				}
+
+				var value = document.getElementById("input").value;
+				if (value.length == 0 || !Number(value)){
+					alert("请输入数字");
+					return;
+				}
+				if (Number(value) < 10 || Number(value) > 100){
+					alert("10~100之间的数字");
+					return;
+				}
+
+				
+				var li = document.createElement("li");
+
+				if (side == "left-in") {
+					ul.insertBefore(li, ul.firstChild);
+				}else if (side == "right-in"){
+					ul.appendChild(li);
+				}
+				num += 1;
+				li.style.height = value + "px";
+			}
+
+			function out(side){
+				if (ul.children.length == 0){
+					alert("队列已空！");
+					return;
+				}
+				if (side == "left-out"){
+					ul.removeChild(ul.children[0]);
+				}else if(side == "right-out") {
+					ul.removeChild(ul.lastChild);
+				}else{
+					alert("error");
+				}
+			}
+
+			function convertToArray(nodes){
+				var arr = new Array();
+				try{
+					arr = Array.prototype.slice.call(nodes,0);
+				}catch(ex){
+					for (var i = 0, len = nodes.length; i < len; i ++){
+						arr.push(nodes[i]);
+					}
+				}
+				return arr;
+			}
+
+			function sort(){
+				/*
+					选择排序算法，把每个数都与第一个数比较，如果小于第一个数，就把他们交换位置；这样一轮下来后最小的元素就排在了第一位
+				*/
+				var lists = document.getElementsByTagName("li");
+				if (lists.length ==0){
+					alert("没有队列!");
+					return;
+				}
+				var listsArray = convertToArray(lists);
+
+				for (var i = 0, len = listsArray.length; i < len - 1; i ++) {
+					for (var j = i + 1; j < len; j ++){
+						if (listsArray[i].style.height > listsArray[j].style.height){
+							var temp = listsArray[i];
+							listsArray[i] = listsArray[j];
+							listsArray[j] = temp;
+						}
+					}
+				}
+				for (var i = 0, len = listsArray.length; i < len; i ++){
+					ul.appendChild(listsArray[i]);
+				}
+			}
+
+			function init(){
+				document.getElementById("left-in").addEventListener("click", function(){
+					insert(this.id);
+				});
+				document.getElementById("right-in").addEventListener("click", function(){
+					insert(this.id);
+				});
+				document.getElementById("left-out").addEventListener("click", function(){
+					out(this.id);
+				})
+				document.getElementById("right-out").addEventListener("click", function(){
+					out(this.id);
+				})
+				document.getElementById("sort").addEventListener("click", sort);
+
+				document.getElementById("squence").addEventListener("click", function(event){
+					var target = event.target;
+					if (target.tagName == "LI"){
+						this.removeChild(target);
+					}
+				})
+			}
+			init();
+		</script>
+	</body>
+</html>

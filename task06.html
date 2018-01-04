@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<title>IFE JavaScript Task 01</title>
+		<style type = "text/css">
+			#aqi-input {
+				margin-top: 10px;
+				height:40px;
+				width: 100px;
+			}
+			#matched {
+				background-color:#eee;
+				color:red;
+			}
+		</style>
+	</head>
+	<body>
+		<label>请输入北京今天空气质量：<textarea id = "aqi-input" placeholder = "文本输入框"></textarea></label>
+
+		<button id = "input-btn">确认填写</button>
+		<div>您输入的值是：<span id = "aqi-display"></span></div>
+
+		<div>
+			<label>查询输入框:<input id = "search-input" type = "text" /></label>
+			<button id = "search-btn">查询</button>
+		</div>
+
+		<script type = "text/javascript">
+			function displayInfo() {
+				var aqiInputValue = document.getElementById("aqi-input").value;
+				var aqiDisplay = document.getElementById("aqi-display");
+				var aqiInputValueArray = aqiInputValue.split(/[,，。.:：;/\s+\r\n]/g);
+				for (var i = 0, len = aqiInputValueArray.length; i < len; i ++) {
+					var textNode = document.createTextNode(aqiInputValueArray[i] + " ");
+					var spanNode = document.createElement("span");
+					spanNode.append(textNode);
+					aqiDisplay.append(spanNode);
+				}
+			}
+
+			function searchInfo() {
+				var searchValue = document.getElementById("search-input").value;
+				var childs = document.getElementById("aqi-display").childNodes;
+				var pattern = new RegExp(searchValue, "g");
+				var hasMatch = false;
+				for (var i  = 0; i < childs.length; i ++){
+					console.log(childs[i].innerHTML);
+					if (pattern.test(childs[i].innerHTML)){
+						childs[i].id = "matched";
+						hasMatch = true;
+					}
+				}
+				if (!hasMatch) {
+					alert("find failed!");
+				}
+			}
+
+			function init() {
+				document.getElementById("input-btn").addEventListener("click", displayInfo);
+				document.getElementById("search-btn").addEventListener("click", searchInfo);
+			}
+			init();
+		</script>
+	</body>
+</html>

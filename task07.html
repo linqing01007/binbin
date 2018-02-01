@@ -1,0 +1,183 @@
+<html>
+<head>
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	div {
+		padding: 20px;
+		border: 2px black solid;
+		box-sizing: border-box;
+		background-color: white;
+	}
+	.root {
+		overflow: hidden;
+		clear: both;
+		width: 800px;
+	}
+	.left {
+		float: left;
+		margin-right: 10px;
+
+	}
+	.right {
+		float: right;
+
+	}
+</style>
+</head>
+<body>
+	<div class = "root">
+
+		<div class = "left">
+			<div class = "left">
+				<div class = "left">
+				</div>
+				<div class = "right">
+				</div>
+			</div>
+			<div class = "right">
+				<div class = "left">
+				</div>
+				<div class = "right">
+				</div>
+			</div>
+		</div>
+		<div class = "right">
+			<div class = "left">
+				<div class = "left">
+				</div>
+				<div class = "right">
+				</div>
+			</div>
+			<div class = "right">
+				<div class = "left">
+				</div>
+				<div class = "right">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<form>
+		<button id = "pre" value = "pre" type = "button">pre</button>
+		<button id = "in" value = "in" type = "button">in</button>
+		<button id = "post" value = "psot" type = "button">post</button>
+	</form>
+
+	<script type = "text/javascript">
+		var divElements = document.getElementsByTagName("div");
+		var treeNode = [];
+		var timer = 1;
+		function getStyle(el, name) {
+			if (window.getComputedStyle) {
+				return window.getComputedStyle(el, null)[name];			
+			}else {
+				return el.currentStyle[name];
+			}
+		}
+
+
+		function changeColor(){
+			var i = 0;
+			timer = window.setInterval(function(){
+				if (i == 0) {
+					console.log("i = 0");
+					treeNode[i].style.backgroundColor = "blue";
+				}else if (i < treeNode.length){
+					console.log("i < treeNode.length");
+					treeNode[i - 1].style.backgroundColor = "white";
+					treeNode[i].style.backgroundColor = "blue";
+				}else {
+					console.log("clear");
+					window.clearInterval(timer);
+					treeNode[treeNode.length - 1].style.backgroundColor = "white";
+				}
+				i++;
+			}, 1000);
+			
+		}
+
+		function _order(func, arg) {
+			return function(){
+				if (typeof func == "function"){
+					func(arg);
+				}
+			}
+		}
+
+		var count = 0;
+		function preOrder(node) {
+			if (node !== undefined) {
+				treeNode.push(node);
+				//window.setTimeout(_order(preOrder, node.children[0]), 1000);
+				//window.setTimeout(_order(preOrder, node.children[1]), 2000);
+				preOrder(node.children[0]);
+				preOrder(node.children[1]);
+			}
+		}
+
+		function inOrder(node) {
+			if (node !== undefined) {
+				inOrder(node.children[0]);
+				treeNode.push(node);
+				inOrder(node.children[1]);
+			}
+		}
+
+		function postOrder(node) {
+			if (node !== undefined) {
+				postOrder(node.children[0]);
+				postOrder(node.children[1]);
+				treeNode.push(node);
+			}
+		}
+
+		function reset(){
+			window.clearInterval(timer);
+			treeNode = [];
+		}
+		
+
+		function init(){
+			for (var i = 0, len = divElements.length; i < len; i ++) {
+				if (divElements[i].className !== "root") {
+					width = parseInt(getStyle(divElements[i].parentNode, "width"));
+					if (width < 80) {
+						return;
+					}
+					divElements[i].style.width = (width - 60) / 2 + "px";
+				}
+				
+			}
+			document.getElementById("pre").addEventListener("click", function(event) {
+				reset();
+				preOrder(divElements[0]);
+				changeColor();
+
+			});
+			document.getElementById("in").addEventListener("click", function(event) {
+				reset();
+				inOrder(divElements[0]);
+				changeColor();
+
+			})
+			document.getElementById("post").addEventListener("click", function(event) {
+				reset();
+				postOrder(divElements[0]);
+				changeColor();
+			})
+
+		}
+
+		
+
+
+
+		init();
+	</script>
+
+</body>
+
+</html>
